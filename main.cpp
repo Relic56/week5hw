@@ -16,11 +16,15 @@ int main()
     threshold(hue_orig,low,60,255,CV_THRESH_BINARY);
     threshold(hue_orig,high,180,255,CV_THRESH_BINARY_INV);
     result = low & high;
-    imshow("Original", img);
-    imshow("Thresholded", result);
     Mat edge;
     Canny(img,edge,100,200);
-    imshow("Edge", edge);
+    vector<vector<Point> > contours;
+    findContours(edge,contours,CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE, Point(0,0) );
+    Mat contoured = Mat::zeros(img.rows, img.cols, CV_8UC3);
+    Scalar color = Scalar(255,255,255);
+    drawContours(contoured, contours, -1, color);
+    imshow("Contours", contoured);
+    imshow("Thresholded", result);
     waitKey(0);
     return 0;
 }
